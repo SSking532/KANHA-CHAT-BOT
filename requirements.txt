@@ -1,0 +1,6 @@
+flask
+flask_cors
+google-cloud-dialogflow
+google-cloud-translate
+google-cloud-texttospeech
+python-dotenv
