@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #ffe0f0);
+}
+
+.hidden {
+    display: none;
+}
+
+#startScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    animation: fadeIn 1s ease-in;
+}
+
+#startScreen .logo {
+    width: 150px;
+    animation: bounce 2s infinite;
+}
+
+#startScreen h1 {
+    font-size: 50px;
+    margin: 20px 0;
+    color: #00695c;
+}
+
+#startBtn {
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
+
+#chatScreen {
+    max-width: 600px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0px 5px 25px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: fadeIn 1s ease-in;
+}
+
+#chatHeader {
+    display: flex;
+    align-items: center;
+    background-color: #26a69a;
+    padding: 10px 20px;
+    color: white;
+}
+
+#chatHeader .logo-small {
+    width: 50px;
+    margin-right: 10px;
+}
+
+#messages {
+    height: 400px;
+    padding: 20px;
+    overflow-y: scroll;
+    background: #f1f8e9;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 20px;
+    width: fit-content;
+    max-width: 80%;
+    animation: slideIn 0.5s ease-out;
+}
+
+.message.user {
+    background-color: #81d4fa;
+    align-self: flex-end;
+}
+
+.message.bot {
+    background-color: #ffd54f;
+    align-self: flex-start;
+}
+
+#controls {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+    background: #e0f7fa;
+}
+
+#controls input, #controls select, #controls button {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+#controls button {
+    background-color: #26a69a;
+    color: white;
+    cursor: pointer;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
