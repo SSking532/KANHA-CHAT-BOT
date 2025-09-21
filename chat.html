@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KANHA - Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="chatScreen">
+    <div id="chatHeader">
+        <img src="images/logo.jpg" alt="KANHA Logo" class="logo-small">
+        <h2>KANHA - Your Travel Companion</h2>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="controls">
+        <select id="languageSelect">
+    <option value="en-US">English</option>
+    <option value="hi-IN">Hindi</option>
+    <option value="bn-IN">Bengali</option>
+    <option value="pa-IN">Punjabi</option>
+    <option value="ta-IN">Tamil</option>
+    <option value="te-IN">Telugu</option>
+    <option value="mr-IN">Marathi</option>
+    <option value="ml-IN">Malayalam</option>
+    <option value="gu-IN">Gujarati</option>
+    <option value="ne-NP">Nepali</option>
+    <option value="fr-FR">French</option>
+    <option value="es-ES">Spanish</option>
+    <option value="it-IT">Italian</option>
+    <option value="ur-PK">Urdu</option>
+    <option value="as-IN">Assamese</option>
+    <option value="mni-IN">Manipuri</option>
+    <option value="zh-CN">Chinese</option>
+</select>
+
+
+        <select id="genderSelect">
+            <option value="female">Female Voice</option>
+            <option value="male">Male Voice</option>
+        </select>
+
+        <input type="text" id="userInput" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <script>
+    let voices = [];
+    window.speechSynthesis.onvoiceschanged = () => {
+        voices = window.speechSynthesis.getVoices();
+    };
+
+    async function sendMessage() {
+        const input = document.getElementById('userInput');
+        const msg = input.value;
+        if (!msg) return;
+
+        const messagesDiv = document.getElementById('messages');
+
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user';
+        userDiv.textContent = "You: " + msg;
+        messagesDiv.appendChild(userDiv);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: msg,
+                    language: document.getElementById('languageSelect').value,
+                    gender: document.getElementById('genderSelect').value
+                })
+            });
+
+            const data = await response.json();
+
+            const botDiv = document.createElement('div');
+            botDiv.className = 'message bot';
+            botDiv.textContent = "KANHA: " + data.reply;
+            messagesDiv.appendChild(botDiv);
+
+            let utterance = new SpeechSynthesisUtterance(data.reply);
+            if (data.gender === "female") {
+                utterance.voice = voices.find(v => v.name.toLowerCase().includes('female')) || voices[0];
+            } else {
+                utterance.voice = voices.find(v => v.name.toLowerCase().includes('male')) || voices[0];
+            }
+            utterance.pitch = 1.4;
+            utterance.rate = 1;
+            utterance.lang = data.language;
+
+            window.speechSynthesis.speak(utterance);
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            input.value = "";
+
+        } catch (error) {
+            alert("Chatbot server not running. Run 'python app.py'");
+        }
+    }
+    </script>
+
+  </div>
+
+</body>
+</html>

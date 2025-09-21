@@ -1,11 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import random
+import random, json, os
+from deep_translator import GoogleTranslator
 
 app = Flask(__name__)
-CORS(app)  # Allow browser to talk to Flask
+CORS(app)
 
-# Creative greetings for the chatbot
+# Load tourist places data
+with open("places.json", "r", encoding="utf-8") as f:
+    places_data = json.load(f)
+
+# Creative greetings
 greetings = [
     "Hello! Welcome, I will be your guide for this amazing trip!",
     "Hi there! I’m your friendly travel companion, ready to assist you!",
@@ -17,22 +22,42 @@ greetings = [
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.json
-    user_message = data.get("message", "")
-    language = data.get("language", "en-US")  # Selected language
-    gender = data.get("gender", "female")    # Selected voice
+    user_message = data.get("message", "").lower().strip()
+    language = data.get("language", "en-US")
+    gender = data.get("gender", "female")
 
-    # If user says hello, greet creatively
-    if any(word in user_message.lower() for word in ["hi","hello","hey","hii","hola"]):
+    # 1. Greeting detection
+    if any(word in user_message for word in ["hi", "hello", "hey", "hii", "hola"]):
         reply_message = random.choice(greetings)
+
+    # 2. Check if user asked about a tourist place
+    elif user_message in places_data:
+        place = places_data[user_message]
+        reply_message = (
+            f"Here’s some info about {user_message.title()}:\n"
+            f"History: {place['history']}\n"
+            f"Famous Spots: {', '.join(place['famous_spots'])}\n"
+            f"Emergency Numbers: {', '.join(place['emergency_numbers'])}\n"
+            f"Past Accidents: {place['past_accidents']}"
+        )
+
     else:
-        # Default reply (can expand later with real place info)
         reply_message = f"You said: {user_message}. I’ll help you explore safely!"
+
+    # 3. Translate reply into selected language
+    try:
+        lang_code = language.split("-")[0]
+        translated = GoogleTranslator(source="auto", target=lang_code).translate(reply_message)
+        reply_message = translated
+    except Exception as e:
+        print("Translation failed:", e)
 
     return jsonify({
         "reply": reply_message,
         "language": language,
         "gender": gender
     })
+
 
 if __name__ == "__main__":
     app.run(debug=True)
