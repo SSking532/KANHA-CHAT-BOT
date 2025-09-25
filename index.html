@@ -1,41 +1,90 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>KANHA Chatbot</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+    }
+
+    #startScreen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin: 0 0 20px 0;
+    }
+
+    #startBtn {
+      padding: 12px 24px;
+      font-size: 18px;
+      background: #00aaff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #startBtn:hover {
+      background: #0088cc;
+    }
+  </style>
 </head>
 <body>
 
-<div id="startScreen">
-  <img src="images/logo.jpg" alt="KANHA Logo" class="logo">
-  <h1>KANHA</h1>
-  <button id="startBtn">Start</button>
-</div>
+  <div id="startScreen">
+    <img src="images/logo.jpg" alt="KANHA Logo" class="logo" />
+    <h1>KANHA</h1>
+    <button id="startBtn">Start</button>
+  </div>
 
-<script>
-// Redirect to chat page on start button click
-document.getElementById('startBtn').onclick = function() {
-    window.location.href = "chat.html";
-};
+  <script>
+    // Redirect to chat page on start button click
+    document.getElementById('startBtn').onclick = function() {
+      window.location.href = "chat.html";
+    };
 
-// Background slideshow
-const images = [
-    'images/mountain.jpg',
-    'images/waterfall.jpg',
-    'images/river.jpg',
-    'images/forest.jpg'
-];
-let currentImageIndex = 0;
+    // Background image slideshow
+    const images = [
+      'images/mountain.jpg',
+      'images/waterfall.jpg',
+      'images/river.jpg',
+      'images/forest.jpg'
+    ];
 
-function changeBackground() {
-    document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
-    currentImageIndex = (currentImageIndex + 1) % images.length;
-}
-setInterval(changeBackground, 7000);
-changeBackground();
-</script>
+    let currentImageIndex = 0;
+
+    function changeBackground() {
+      document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+    }
+
+    setInterval(changeBackground, 7000); // Change every 7 seconds
+    changeBackground(); // Set initial background
+  </script>
 
 </body>
 </html>
