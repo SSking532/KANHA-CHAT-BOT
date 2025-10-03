@@ -141,11 +141,10 @@ def chat():
         "gender": gender
     })
 
-# ✅ Fix: Corrected __name__ check
-
+# ✅ Vercel handler
 from mangum import Mangum
 handler = Mangum(app)
 
-# Local development only
+# ✅ Local run
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8000)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
