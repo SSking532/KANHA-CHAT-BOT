@@ -4,3 +4,7 @@ google-cloud-dialogflow
 google-cloud-translate
 google-cloud-texttospeech
 python-dotenv
+flask-cors
+requests
+deep-translator
+mangum

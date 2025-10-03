@@ -142,5 +142,10 @@ def chat():
     })
 
 # ✅ Fix: Corrected __name__ check
+
+from mangum import Mangum
+handler = Mangum(app)
+
+# Local development only
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=8000)
